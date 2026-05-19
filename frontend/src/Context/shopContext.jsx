@@ -15,7 +15,7 @@ function ShopContext({ children }) {
   const [cartItem, setCartItem] = useState({})
   const [loading, setLoading] = useState(false)
 
-  const currency = '₹'
+  const currency = 'Rs.'
   const delivery_fee = 40
 
   const getProducts = async () => {
@@ -59,9 +59,10 @@ function ShopContext({ children }) {
   }
 
   const getUserCart = async () => {
+    if (!userData) return;
     try {
       const result = await axios.post(serverUrl + '/api/cart/get', {}, { withCredentials: true })
-      setCartItem(result.data)
+      setCartItem(result.data || {})
     } catch (error) {
       console.log(error)
     }
@@ -117,8 +118,10 @@ function ShopContext({ children }) {
   }, [])
 
   useEffect(() => {
-    getUserCart()
-  }, [])
+    if (userData) {
+      getUserCart()
+    }
+  }, [userData])
 
   const value = {
     products,
@@ -142,4 +145,3 @@ function ShopContext({ children }) {
 }
 
 export default ShopContext
-
