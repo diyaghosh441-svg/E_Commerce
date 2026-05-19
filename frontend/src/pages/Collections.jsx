@@ -33,6 +33,7 @@ function Collections() {
     }
 
     const applyFilter = ()=>{
+        if (!Array.isArray(products)) return;
         let productCopy = products.slice()
 
         if(showSearch && search){
@@ -52,6 +53,7 @@ function Collections() {
 
 
   const sortProducts = ()=>{
+        if (!Array.isArray(filterProduct)) return;
         let fbCopy = filterProduct.slice()
 
         switch(sortType){
@@ -75,17 +77,14 @@ function Collections() {
 
 
     useEffect(()=>{
-    setFilterProduct(products)
+    if (Array.isArray(products)) {
+        setFilterProduct(products)
+    }
     },[products])
 
     useEffect(()=>{
         applyFilter()
     },[category,subCategory,search ,showSearch])
-
-
-
-
-
 
   return (
     <div className='w-[99vw]  min-h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] flex items-start flex-col md:flex-row justify-start  pt-[70px] overflow-x-hidden z-[2] pb-[110px]'>
@@ -109,7 +108,7 @@ function Collections() {
             <div className='w-[230px] h-[120px]  flex items-start justify-center gap-[10px] flex-col'>
                 <p className='flex items-center justify-center gap-[10px] text-[16px] font-light'> <input type="checkbox" value={'TopWear'} className='w-3' onChange={toggleSubCategory} /> TopWear</p>
                  <p className='flex items-center justify-center gap-[10px] text-[16px] font-light'> <input type="checkbox" value={'BottomWear'} className='w-3' onChange={toggleSubCategory} /> BottomWear</p>
-                  <p className='flex items-center justify-center gap-[10px] text-[16px] font-light'> <input type="checkbox" value={'WinterWear'} className='w-3' onChange={toggleSubCategory} /> WinterWear</p>
+                  <p className='flex items-center justify-center gap-[10px] text-[16px] font-light'> <input type="checkbox" value={'WinterWear'} onChange={toggleSubCategory} className='w-3' /> WinterWear</p>
             </div>
         </div>
       </div>
