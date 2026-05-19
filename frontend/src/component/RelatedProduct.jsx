@@ -4,20 +4,20 @@ import Title from './Title'
 import Card from './Card'
 
 function RelatedProduct({category,subCategory,currentProductId }) {
-
     let {products} = useContext(shopDataContext)
     let [related,setRelated] = useState([])
 
-    const relatedProducts = products
-      .filter((item) => category === item.category)
-      .filter((item) => subCategory === item.subCategory)
-      .filter((item) => currentProductId !== item._id)
-      .slice(0, 4)
-
     useEffect(() => {
-      setRelated(relatedProducts)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (Array.isArray(products)) {
+        const filtered = products
+          .filter((item) => category === item.category)
+          .filter((item) => subCategory === item.subCategory)
+          .filter((item) => currentProductId !== item._id)
+          .slice(0, 4)
+        setRelated(filtered)
+      }
     }, [category, subCategory, currentProductId, products])
+
   return (
     <div className='my-[130px] md:my-[40px]  md:px-[60px] '>
         <div className='ml-[20px] lg:ml-[80px]'>
