@@ -6,8 +6,9 @@ services:
     name: onecart-backend
     env: node
     region: oregon
-    buildCommand: npm install
-    startCommand: npm start
+    rootDir: backend
+    buildCommand: cd ../frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: node index.js
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -32,24 +33,3 @@ services:
         sync: false
       - key: RAZORPAY_KEY_SECRET
         sync: false
-
-  - type: web
-    name: onecart-frontend
-    env: static
-    region: oregon
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: public, max-age=0, must-revalidate
-    routes:
-      - type: rewrite
-        source: /**
-        destination: /index.html
-    envVars:
-      - key: VITE_SERVER_URL
-        fromService:
-          name: onecart-backend
-          envVarKey: RENDER_EXTERNAL_URL

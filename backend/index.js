@@ -2,6 +2,8 @@ import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import cors from "cors"
+import path from "path"
+import { fileURLToPath } from "url"
 import connectDb from "./config/db.js"
 import cookieParser from "cookie-parser"
 import authRoutes from "./routes/authRoutes.js"
@@ -11,8 +13,10 @@ import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
 import corsOptions from "./config/corsConfig.js"
 
-const PORT = process.env.PORT || 5000
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
+const PORT = process.env.PORT || 5000
 const app = express()
 
 app.use(express.json())
@@ -28,6 +32,12 @@ app.use("/api/user", userRoutes)
 app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/order", orderRoutes)
+
+app.use(express.static(path.join(__dirname, "../frontend/dist")))
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
+})
 
 connectDb().then(() => {
   app.listen(PORT, () => {
