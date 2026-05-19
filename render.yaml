@@ -1,4 +1,4 @@
-﻿database:
+database:
   name: onecart-db
 
 services:
@@ -37,15 +37,16 @@ services:
     name: onecart-frontend
     env: static
     region: oregon
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     headers:
       - path: /*
         name: Cache-Control
         value: public, max-age=0, must-revalidate
     routes:
       - type: rewrite
-        source: /*
+        source: /**
         destination: /index.html
     envVars:
       - key: VITE_SERVER_URL
