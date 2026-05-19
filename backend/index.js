@@ -1,4 +1,4 @@
-﻿import express from "express"
+import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import cors from "cors"
@@ -29,6 +29,11 @@ app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/order", orderRoutes)
 
-connectDb().catch(err => {
+connectDb().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+}).catch(err => {
   console.error("Failed to connect to MongoDB:", err?.message || err)
+  process.exit(1)
 })
