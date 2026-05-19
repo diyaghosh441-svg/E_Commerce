@@ -1,9 +1,9 @@
-import React, { createContext } from 'react'
+import React, { createContext } from "react"
 
 export const authDataContext = createContext()
 
 function AuthContext({ children }) {
-  const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || window.location.origin
 
   const value = { serverUrl }
 
