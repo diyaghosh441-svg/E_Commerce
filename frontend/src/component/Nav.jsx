@@ -1,4 +1,4 @@
-﻿import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import logo from '../assets/logo.png'
 import { IoSearchCircleOutline } from "react-icons/io5";
 import { FaCircleUser } from "react-icons/fa6";

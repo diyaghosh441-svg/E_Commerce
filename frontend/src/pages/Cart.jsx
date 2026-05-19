@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Title from '../component/Title'
-import { shopDataContext } from '../context/ShopContext'
+import { shopDataContext } from '../Context/shopContext'
 import { useNavigate } from 'react-router-dom'
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CartTotal from '../component/CartTotal';
