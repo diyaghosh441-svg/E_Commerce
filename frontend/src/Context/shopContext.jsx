@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+﻿import React, { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { authDataContext } from './AuthContext'
 import { userDataContext } from './UserContext'
@@ -61,7 +61,7 @@ function ShopContext({ children }) {
   const getUserCart = async () => {
     if (!userData) return;
     try {
-      const result = await axios.post(serverUrl + '/api/cart/get', {}, { withCredentials: true })
+      const result = await axios.get(serverUrl + '/api/cart/get', { withCredentials: true })
       setCartItem(result.data || {})
     } catch (error) {
       console.log(error)
