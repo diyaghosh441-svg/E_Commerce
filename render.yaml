@@ -1,4 +1,4 @@
-database:
+﻿database:
   name: onecart-db
 
 services:
@@ -7,7 +7,7 @@ services:
     env: node
     region: oregon
     rootDir: backend
-    buildCommand: cd ../frontend && npm install && npm run build && cd ../backend && npm install
+    buildCommand: npm install
     startCommand: node index.js
     healthCheckPath: /health
     envVars:
@@ -17,10 +17,22 @@ services:
         fromDatabase:
           name: onecart-db
           property: connectionString
+      - key: MONGODB_URL
+        fromDatabase:
+          name: onecart-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: PORT
         value: 5000
+      - key: ADMIN_EMAIL
+        value: admin@onecart.com
+      - key: ADMIN_PASSWORD
+        value: admin1234567
+      - key: FRONTEND_URL
+        fromService:
+          name: onecart-frontend
+          envVarKey: RENDER_EXTERNAL_URL
       - key: CLOUDINARY_API_KEY
         sync: false
       - key: CLOUDINARY_API_SECRET
@@ -33,3 +45,51 @@ services:
         sync: false
       - key: RAZORPAY_KEY_SECRET
         sync: false
+
+  - type: web
+    name: onecart-frontend
+    env: static
+    region: oregon
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    envVars:
+      - key: VITE_SERVER_URL
+        fromService:
+          name: onecart-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: VITE_FIREBASE_API_KEY
+        sync: false
+      - key: VITE_FIREBASE_AUTH_DOMAIN
+        sync: false
+      - key: VITE_FIREBASE_PROJECT_ID
+        sync: false
+      - key: VITE_FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: VITE_FIREBASE_MESSAGING_SENDER_ID
+        sync: false
+      - key: VITE_FIREBASE_APP_ID
+        sync: false
+      - key: VITE_RAZORPAY_KEY_ID
+        sync: false
+
+  - type: web
+    name: onecart-admin
+    env: static
+    region: oregon
+    rootDir: admin
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    envVars:
+      - key: VITE_SERVER_URL
+        fromService:
+          name: onecart-backend
+          envVarKey: RENDER_EXTERNAL_URL

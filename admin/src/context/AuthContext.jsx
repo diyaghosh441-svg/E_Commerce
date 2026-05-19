@@ -2,7 +2,7 @@
 
 export const authDataContext = createContext()
 function AuthContext({children}) {
-    let serverUrl = "http://localhost:5000"
+    const serverUrl = import.meta.env.VITE_SERVER_URL || window.location.origin
 
     let value = {
       serverUrl
