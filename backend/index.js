@@ -19,6 +19,10 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors(corsOptions))
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" })
+})
+
 app.use("/api/auth", authRoutes)
 app.use("/api/user", userRoutes)
 app.use("/api/product", productRoutes)
@@ -27,8 +31,4 @@ app.use("/api/order", orderRoutes)
 
 connectDb().catch(err => {
   console.error("Failed to connect to MongoDB:", err?.message || err)
-})
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
 })
