@@ -8,7 +8,7 @@ function BestSeller() {
     let [bestSeller,setBestSeller] = useState([])
 
     useEffect(()=>{
-    let filterProduct = products.filter((item) => item.bestseller)
+    let filterProduct = Array.isArray(products) ? products.filter((item) => item.bestseller) : []
 
     setBestSeller(filterProduct.slice(0,4));
     // eslint-disable-next-line react-hooks/exhaustive-deps
