@@ -29,11 +29,12 @@ const allowedOrigins = [
   "http://127.0.0.1:5188",
   "http://127.0.0.1:5189",
   "http://127.0.0.1:5190",
-]
+  process.env.FRONTEND_URL
+].filter(Boolean)
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || (origin && origin.includes(".onrender.com"))) {
       callback(null, true)
     } else {
       callback(new Error("Not allowed by CORS"))
