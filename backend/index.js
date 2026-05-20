@@ -33,11 +33,30 @@ app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/order", orderRoutes)
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")))
+const adminDistPath = path.join(__dirname, "../admin/dist")
+const frontendDistPath = path.join(__dirname, "../frontend/dist")
 
+// Serve admin app under /admin
+app.use(
+  "/admin",
+  express.static(adminDistPath, {
+    index: false,
+  })
+)
+
+// SPA fallback for admin routes (client-side routing)
+app.get(/^\/admin\/(.*)$/, (req, res) => {
+  res.sendFile(path.join(adminDistPath, "index.html"))
+})
+
+// Serve frontend app at root
+app.use(express.static(frontendDistPath, { index: false }))
+
+// SPA fallback for frontend (keep /admin handled by admin routes above)
 app.use((req, res, next) => {
-  if (req.path.startsWith("/api")) return next();
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
+  if (req.path.startsWith("/api")) return next()
+  if (req.path.startsWith("/admin")) return next()
+  res.sendFile(path.join(frontendDistPath, "index.html"))
 })
 
 connectDb().then(() => {
