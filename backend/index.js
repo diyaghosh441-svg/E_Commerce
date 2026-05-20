@@ -37,7 +37,8 @@ const adminDistPath = path.join(__dirname, "../admin/dist")
 const frontendDistPath = path.join(__dirname, "../frontend/dist")
 
 app.use("/admin", express.static(adminDistPath))
-app.use("/admin", (req, res) => {
+app.use("/admin", (req, res, next) => {
+  if (req.path.startsWith("/assets/")) return next()
   res.sendFile(path.join(adminDistPath, "index.html"))
 })
 
