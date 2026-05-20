@@ -1,4 +1,4 @@
-﻿import express from "express"
+import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import cors from "cors"
@@ -37,14 +37,12 @@ const adminDistPath = path.join(__dirname, "../admin/dist")
 const frontendDistPath = path.join(__dirname, "../frontend/dist")
 
 app.use("/admin", express.static(adminDistPath))
-
 app.use("/admin", (req, res) => {
   res.sendFile(path.join(adminDistPath, "index.html"))
 })
 
 app.use(express.static(frontendDistPath))
-
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(frontendDistPath, "index.html"))
 })
 
