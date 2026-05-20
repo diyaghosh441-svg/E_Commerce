@@ -39,8 +39,8 @@ const frontendDistPath = path.join(__dirname, "../frontend/dist")
 // Serve admin static assets under /admin
 app.use("/admin", express.static(adminDistPath))
 
-// SPA fallback for admin routes
-app.get("/admin/*", (req, res) => {
+// SPA fallback for admin routes (use named parameter instead of wildcard)
+app.get("/admin/:path(*)", (req, res) => {
   res.sendFile(path.join(adminDistPath, "index.html"))
 })
 
