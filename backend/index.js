@@ -36,26 +36,24 @@ app.use("/api/order", orderRoutes)
 const adminDistPath = path.join(__dirname, "../admin/dist")
 const frontendDistPath = path.join(__dirname, "../frontend/dist")
 
-// Serve admin app under /admin
-app.use(
-  "/admin",
-  express.static(adminDistPath, {
-    index: false,
-  })
-)
+// Serve admin static assets under /admin
+app.use("/admin", express.static(adminDistPath))
 
-// SPA fallback for admin routes (client-side routing)
-app.get(/^\/admin\/(.*)$/, (req, res) => {
+// SPA fallback for admin routes
+app.get("/admin/*", (req, res) => {
+  res.sendFile(path.join(adminDistPath, "index.html"))
+})
+
+// Also handle exact /admin route
+app.get("/admin", (req, res) => {
   res.sendFile(path.join(adminDistPath, "index.html"))
 })
 
 // Serve frontend app at root
-app.use(express.static(frontendDistPath, { index: false }))
+app.use(express.static(frontendDistPath))
 
-// SPA fallback for frontend (keep /admin handled by admin routes above)
-app.use((req, res, next) => {
-  if (req.path.startsWith("/api")) return next()
-  if (req.path.startsWith("/admin")) return next()
+// SPA fallback for frontend
+app.get("*", (req, res) => {
   res.sendFile(path.join(frontendDistPath, "index.html"))
 })
 
